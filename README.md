@@ -53,6 +53,8 @@ npm install
 npm run dev
 ```
 Open Website [https://qr-barcode-generator-nu.vercel.app](https://qr-barcode-generator-nu.vercel.app)
+
+
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 You can also pre-fill a URL via the query string:
