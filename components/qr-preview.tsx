@@ -21,6 +21,7 @@ import { drawLogoOverlay } from "@/lib/logo-overlay";
 import { EXPORT_SIZES } from "@/lib/creativity";
 import type { QrSettings, ScanCheckResult } from "@/lib/types";
 import Scanner from "./scanner";
+import { AdSlot } from "./ad-slot";
 import { Segmented } from "./controls";
 
 const PREVIEW_SIZE = 512;
@@ -317,7 +318,7 @@ export function QrPreview({
   return (
     <div className="rounded-3xl border border-zinc-800/80 bg-zinc-900/40 p-4 backdrop-blur-sm sm:p-7">
       {/* QR stage */}
-      <div className="dot-grid relative mx-auto flex aspect-square w-full max-w-[460px] items-center justify-center rounded-2xl border border-zinc-800/60 bg-zinc-950/70 p-5 sm:p-7">
+      <div className="dot-grid relative mx-auto flex aspect-square w-full max-w-[460px] xl:max-w-[540px] 2xl:max-w-[620px] items-center justify-center rounded-2xl border border-zinc-800/60 bg-zinc-950/70 p-5 sm:p-7">
         {data ? (
           <>
             <div ref={containerRef} className="qr-canvas relative h-full w-full" />
@@ -494,6 +495,11 @@ export function QrPreview({
             </motion.div>
           )}
         </AnimatePresence>
+      </div>
+
+      {/* Below-preview ad */}
+      <div className="mt-4 border-t border-zinc-800/60 pt-4">
+        <AdSlot slot="banner" format="horizontal" />
       </div>
     </div>
   );

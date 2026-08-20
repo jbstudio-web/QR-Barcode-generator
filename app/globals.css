@@ -214,3 +214,45 @@ input[type="color"].color-swatch::-moz-color-swatch {
   height: 100% !important;
   display: block;
 }
+
+/* ---- legal / content pages ---- */
+.legal-prose {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--color-zinc-400, #a1a1aa);
+}
+.legal-prose h2 {
+  margin: 2rem 0 0.65rem;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #e4e4e7;
+}
+.legal-prose h2:first-child {
+  margin-top: 0;
+}
+.legal-prose p {
+  margin-bottom: 0.9rem;
+}
+.legal-prose ul {
+  margin: 0 0 1rem;
+  padding-left: 1.1rem;
+  list-style: disc;
+}
+.legal-prose li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.2rem;
+}
+.legal-prose strong {
+  font-weight: 600;
+  color: #d4d4d8;
+}
+.legal-prose a {
+  color: #a5b4fc;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s;
+}
+.legal-prose a:hover {
+  color: #c7d2fe;
+}

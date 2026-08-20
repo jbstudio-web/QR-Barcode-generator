@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { fetchWithTimeout, isSafeUrl } from "@/lib/server-http";
+import { fetchWithTimeout, finalUrlOf, isSafeUrl } from "@/lib/server-http";
 import type { BrandInfo } from "@/lib/types";
 
 const TIMEOUT_MS = 9000;
@@ -120,7 +120,7 @@ export async function GET(request: NextRequest) {
     if (!res.ok) {
       return Response.json({ error: "fetch_failed", status: res.status }, { status: 502 });
     }
-    const finalUrl = res.url || target.href;
+    const finalUrl = finalUrlOf.get(res) || res.url || target.href;
     const contentType = res.headers.get("content-type") ?? "";
     if (
       !contentType.includes("text/html") &&
