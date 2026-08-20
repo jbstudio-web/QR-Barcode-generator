@@ -1,27 +1,17 @@
 import type { NextConfig } from "next";
 
-// AdSense needs to load and frame third-party script, so script-src/frame-src
-// cannot be 'self' alone. Everything else stays locked down.
-const AD_HOSTS = [
-  "https://pagead2.googlesyndication.com",
-  "https://googleads.g.doubleclick.net",
-  "https://tpc.googlesyndication.com",
-  "https://adservice.google.com",
-  "https://www.googletagservices.com",
-].join(" ");
-
 // ponytail: static CSP string, no nonces — Next's inline bootstrap needs
 // 'unsafe-inline' here. Swap to nonce-based via middleware if you ever serve
-// user-generated content.
+// user-generated content. No third-party script hosts: nothing external loads.
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${AD_HOSTS}`,
+  "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
   // data:/blob: cover the generated QR canvas exports; https: covers proxied favicons.
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  `connect-src 'self' ${AD_HOSTS} https://pagead2.googlesyndication.com`,
-  `frame-src ${AD_HOSTS}`,
+  "connect-src 'self'",
+  "frame-src 'none'",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

@@ -21,7 +21,6 @@ import { drawLogoOverlay } from "@/lib/logo-overlay";
 import { EXPORT_SIZES } from "@/lib/creativity";
 import type { QrSettings, ScanCheckResult } from "@/lib/types";
 import Scanner from "./scanner";
-import { AdSlot } from "./ad-slot";
 import { Segmented } from "./controls";
 
 const PREVIEW_SIZE = 512;
@@ -495,11 +494,6 @@ export function QrPreview({
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-
-      {/* Below-preview ad */}
-      <div className="mt-4 border-t border-zinc-800/60 pt-4">
-        <AdSlot slot="banner" format="horizontal" />
       </div>
     </div>
   );

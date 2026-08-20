@@ -45,57 +45,17 @@ export default function Privacy() {
 
       <h2>Advertising and cookies</h2>
       <p>
-        This site displays ads served by Google AdSense. Specifically:
-      </p>
-      <ul>
-        <li>
-          Third-party vendors, including Google, use cookies to serve ads based
-          on your prior visits to this site or other sites.
-        </li>
-        <li>
-          Google&rsquo;s use of advertising cookies enables it and its partners to
-          serve ads to you based on your visit to this and/or other sites on the
-          internet.
-        </li>
-        <li>
-          You may opt out of personalized advertising by visiting{" "}
-          <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">
-            Google Ads Settings
-          </a>
-          .
-        </li>
-        <li>
-          You can opt out of some third-party vendors&rsquo; use of cookies for
-          personalized advertising at{" "}
-          <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">
-            aboutads.info/choices
-          </a>{" "}
-          or{" "}
-          <a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener noreferrer">
-            the NAI opt-out page
-          </a>
-          .
-        </li>
-      </ul>
-      <p>
-        Google&rsquo;s handling of data from partner sites is described in its{" "}
-        <a
-          href="https://policies.google.com/technologies/partner-sites"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          partner-sites policy
-        </a>
-        .
+        This site shows no ads, uses no advertising or analytics cookies, and
+        embeds no third-party trackers. Nothing on this site profiles you or
+        follows you across the web.
       </p>
 
       <h2>If you are in the EU, UK, or Switzerland</h2>
       <p>
-        Where required, a consent banner asks permission before any personalized
-        advertising cookie is set, and you can change or withdraw that choice at
-        any time from the same banner. Our legal basis for the branding fetch and
-        server logs is legitimate interest in operating the service; for
-        advertising cookies it is your consent. You have the right to access,
+        Because we set no advertising or analytics cookies, there is no consent
+        banner to accept. The only processing is the branding fetch you trigger
+        explicitly and standard server logs, both on the basis of legitimate
+        interest in operating the service. You have the right to access,
         correct, delete, or port your personal data, and to complain to your
         local supervisory authority.
       </p>

@@ -23,7 +23,6 @@ import {
   type BarcodeSettings,
 } from "@/lib/barcode";
 import type { ScanCheckResult } from "@/lib/types";
-import { AdSlot } from "./ad-slot";
 import { ColorField, RangeField, Section, Toggle } from "./controls";
 
 export default function BarcodeStudio({ resetToken = 0 }: { resetToken?: number }) {
@@ -185,7 +184,7 @@ export default function BarcodeStudio({ resetToken = 0 }: { resetToken?: number 
 
   return (
     <div className="relative flex flex-1 flex-col">
-      <main className="relative z-10 mx-auto grid w-full max-w-[1920px] flex-1 gap-6 px-4 py-4 sm:px-6 lg:px-8 2xl:px-12 lg:grid-cols-[380px_minmax(0,1fr)] xl:grid-cols-[380px_minmax(0,1fr)_300px] 2xl:grid-cols-[420px_minmax(0,1fr)_336px]">
+      <main className="relative z-10 mx-auto grid w-full max-w-[1920px] flex-1 gap-6 px-4 py-4 sm:px-6 lg:px-8 2xl:px-12 lg:grid-cols-[380px_minmax(0,1fr)] 2xl:grid-cols-[420px_minmax(0,1fr)]">
         {/* ------- controls ------- */}
         <aside className="space-y-4 lg:sticky lg:top-4 lg:h-[calc(100vh-7.5rem)] lg:overflow-y-auto lg:pr-1.5">
           <Section title="Content" hint="text → barcode">
@@ -429,20 +428,8 @@ export default function BarcodeStudio({ resetToken = 0 }: { resetToken?: number 
               Point your phone at the screen to double-check with a real
               scanner.
             </p>
-
-            {/* Below-preview ad */}
-            <div className="mt-4 border-t border-zinc-800/60 pt-4">
-              <AdSlot slot="banner" format="horizontal" />
-            </div>
           </div>
         </section>
-
-        {/* ------- sidebar ad (desktop) ------- */}
-        <aside className="hidden xl:block">
-          <div className="sticky top-4">
-            <AdSlot slot="sidebar" format="vertical" />
-          </div>
-        </aside>
       </main>
     </div>
   );

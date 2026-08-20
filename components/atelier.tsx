@@ -5,7 +5,6 @@ import { useState } from "react";
 import { QrCode, RotateCcw } from "lucide-react";
 import QrStudio from "./qr-studio";
 import { Segmented } from "./controls";
-import { AdSlot } from "./ad-slot";
 
 // bwip-js is browser-only and heavy — load the barcode studio lazily so the
 // QR page (and SSR) never pulls it in.
@@ -59,10 +58,6 @@ export default function Atelier({ initialUrl = "" }: { initialUrl?: string }) {
         </div>
       </header>
 
-      <div className="relative z-10 mx-auto w-full max-w-[1920px] px-4 sm:px-6 lg:px-8 2xl:px-12">
-        <AdSlot slot="banner" format="horizontal" />
-      </div>
-
       <main className="relative z-10 flex-1">
         <div className={mode === "qr" ? "" : "hidden"}>
           <QrStudio initialUrl={initialUrl} resetToken={resetToken} />
@@ -73,7 +68,6 @@ export default function Atelier({ initialUrl = "" }: { initialUrl?: string }) {
       </main>
 
       <footer className="relative z-10 mx-auto w-full max-w-[1920px] px-4 pb-8 sm:px-6 lg:px-8 2xl:px-12">
-        <AdSlot slot="footer" format="horizontal" />
         <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] text-zinc-700">
           <span>QR Atelier — runs entirely in your browser · no accounts, no uploads</span>
           <span aria-hidden>·</span>

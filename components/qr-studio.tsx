@@ -26,7 +26,6 @@ import { buildBrandPalette, extractPalette, imageToDataUrl, loadImage } from "@/
 import { fetchBrand, proxyImageUrl } from "@/lib/metadata";
 import { isValidHttpUrl, toQrData } from "@/lib/readability";
 import { QrPreview } from "./qr-preview";
-import { AdSlot } from "./ad-slot";
 import { ColorField, RangeField, Section, Segmented, Toggle } from "./controls";
 
 export default function QrStudio({
@@ -183,7 +182,7 @@ export default function QrStudio({
 
   return (
     <div className="relative flex flex-1 flex-col">
-      <main className="relative z-10 mx-auto grid w-full max-w-[1920px] flex-1 gap-6 px-4 py-4 sm:px-6 lg:px-8 2xl:px-12 lg:grid-cols-[380px_minmax(0,1fr)] xl:grid-cols-[380px_minmax(0,1fr)_300px] 2xl:grid-cols-[420px_minmax(0,1fr)_336px]">
+      <main className="relative z-10 mx-auto grid w-full max-w-[1920px] flex-1 gap-6 px-4 py-4 sm:px-6 lg:px-8 2xl:px-12 lg:grid-cols-[380px_minmax(0,1fr)] 2xl:grid-cols-[420px_minmax(0,1fr)]">
         {/* ------- controls ------- */}
         <aside className="space-y-4 lg:sticky lg:top-4 lg:h-[calc(100vh-7.5rem)] lg:overflow-y-auto lg:pr-1.5">
           {/* URL */}
@@ -560,13 +559,6 @@ export default function QrStudio({
             onExportSizeChange={(v) => set("exportSize", v)}
           />
         </section>
-
-        {/* ------- sidebar ad (desktop) ------- */}
-        <aside className="hidden xl:block">
-          <div className="sticky top-4">
-            <AdSlot slot="sidebar" format="vertical" />
-          </div>
-        </aside>
       </main>
     </div>
   );
