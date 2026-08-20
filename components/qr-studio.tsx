@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
+  AtSign,
   Globe,
   ImageOff,
   Link2,
@@ -25,6 +26,7 @@ import {
 import { buildBrandPalette, extractPalette, imageToDataUrl, loadImage } from "@/lib/color";
 import { fetchBrand, proxyImageUrl } from "@/lib/metadata";
 import { isValidHttpUrl, toQrData } from "@/lib/readability";
+import { cleanSocialHandle, SOCIAL_PRESETS, type SocialPlatform } from "@/lib/social";
 import { QrPreview } from "./qr-preview";
 import { ColorField, RangeField, Section, Segmented, Toggle } from "./controls";
 
@@ -36,6 +38,8 @@ export default function QrStudio({
   resetToken?: number;
 }) {
   const [url, setUrl] = useState(initialUrl);
+  const [social, setSocial] = useState<SocialPlatform | null>(null);
+  const [socialUser, setSocialUser] = useState("");
   const [settings, setSettings] = useState<QrSettings>(DEFAULT_SETTINGS);
   const [brand, setBrand] = useState<BrandInfo | null>(null);
   const [brandColors, setBrandColors] = useState<string[]>([]);
@@ -58,7 +62,32 @@ export default function QrStudio({
   const lastAnalyzed = useRef("");
   const firstRunRef = useRef(true);
 
-  const qrData = useMemo(() => toQrData(url), [url]);
+  const socialHandle = cleanSocialHandle(socialUser);
+  const socialUrl = useMemo(
+    () =>
+      social && socialHandle
+        ? SOCIAL_PRESETS[social].url(socialHandle)
+        : "",
+    [social, socialHandle],
+  );
+
+  const qrData = socialUrl || toQrData(url);
+
+  // Apply the platform's brand palette + icon instantly, no network needed.
+  const applySocialPreset = useCallback((platform: SocialPlatform, handle: string) => {
+    if (!cleanSocialHandle(handle)) return;
+    const preset = SOCIAL_PRESETS[platform];
+    setSettings((s) => ({
+      ...s,
+      dotColor: preset.palette.ink,
+      accentColor: preset.palette.accent,
+      bgColor: preset.palette.bg,
+      bgColor2: preset.palette.bg2,
+      gradient: "linear",
+      gradientAngle: 45,
+      logo: preset.icon,
+    }));
+  }, []);
 
   const set = useCallback(<K extends keyof QrSettings>(key: K, value: QrSettings[K]) => {
     setSettings((s) => ({ ...s, [key]: value }));
@@ -142,6 +171,8 @@ export default function QrStudio({
 
   const resetAll = useCallback(() => {
     setUrl("");
+    setSocial(null);
+    setSocialUser("");
     setSettings(DEFAULT_SETTINGS);
     clearBrand();
     setScanResult({ status: "idle", decoded: null, matches: null, score: 100 });
@@ -185,6 +216,50 @@ export default function QrStudio({
       <main className="relative z-10 mx-auto grid w-full max-w-[1920px] flex-1 gap-6 px-4 py-4 sm:px-6 lg:px-8 2xl:px-12 lg:grid-cols-[380px_minmax(0,1fr)] 2xl:grid-cols-[420px_minmax(0,1fr)]">
         {/* ------- controls ------- */}
         <aside className="space-y-4 lg:sticky lg:top-4 lg:h-[calc(100vh-7.5rem)] lg:overflow-y-auto lg:pr-1.5">
+          {/* Social QR */}
+          <Section title="Social QR" hint="profile code, pre-styled">
+            <Segmented
+              value={social ?? ""}
+              onChange={(v) => {
+                const next = v === "" ? null : (v as SocialPlatform);
+                setSocial(next);
+                if (next) {
+                  applySocialPreset(next, socialUser);
+                } else {
+                  setSocialUser("");
+                }
+              }}
+              options={[
+                { value: "", label: "Website" },
+                { value: "telegram", label: "Telegram" },
+                { value: "instagram", label: "Instagram" },
+              ]}
+            />
+            {social && (
+              <div className="relative">
+                <AtSign className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-600" />
+                <input
+                  type="text"
+                  value={socialUser}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setSocialUser(v);
+                    applySocialPreset(social, v);
+                  }}
+                  placeholder={SOCIAL_PRESETS[social].placeholder}
+                  spellCheck={false}
+                  className="w-full rounded-xl border border-zinc-800 bg-zinc-950/70 py-3 pl-10 pr-4 text-sm text-zinc-100 placeholder:text-zinc-600 outline-none transition focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20"
+                />
+              </div>
+            )}
+            {social && socialUrl && (
+              <p className="flex items-center gap-1.5 text-[11px] text-zinc-500">
+                <Link2 className="h-3.5 w-3.5 shrink-0" />
+                QR encodes {socialUrl}
+              </p>
+            )}
+          </Section>
+
           {/* URL */}
           <Section title="Website" hint="auto-detect brand colors & logo">
             <div className="relative">
@@ -198,11 +273,12 @@ export default function QrStudio({
                 }}
                 placeholder="paste a website URL…"
                 spellCheck={false}
-                className="w-full rounded-xl border border-zinc-800 bg-zinc-950/70 py-3 pl-10 pr-[86px] text-sm text-zinc-100 placeholder:text-zinc-600 outline-none transition focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20"
+                disabled={social !== null}
+                className="w-full rounded-xl border border-zinc-800 bg-zinc-950/70 py-3 pl-10 pr-[86px] text-sm text-zinc-100 placeholder:text-zinc-600 outline-none transition focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20 disabled:cursor-not-allowed disabled:opacity-40"
               />
               <button
                 type="button"
-                disabled={branding.analyzing || !url}
+                disabled={branding.analyzing || !url || social !== null}
                 onClick={() => void analyze(url)}
                 className="absolute right-1.5 top-1/2 flex -translate-y-1/2 items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-3 py-1.5 text-xs font-medium text-white shadow transition hover:opacity-90 disabled:opacity-40"
               >

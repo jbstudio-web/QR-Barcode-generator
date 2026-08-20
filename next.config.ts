@@ -10,7 +10,8 @@ const csp = [
   // data:/blob: cover the generated QR canvas exports; https: covers proxied favicons.
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self'",
+  // qr-code-styling re-encodes embedded logos via XHR to their data: URL.
+  "connect-src 'self' data: blob:",
   "frame-src 'none'",
   "object-src 'none'",
   "base-uri 'self'",

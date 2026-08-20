@@ -12,6 +12,8 @@ import {
   Loader2,
   Link2,
   ScanLine,
+  Share2,
+  Wand2,
   XCircle,
 } from "lucide-react";
 import { buildQrOptions } from "@/lib/qr-options";
@@ -23,7 +25,12 @@ import type { QrSettings, ScanCheckResult } from "@/lib/types";
 import Scanner from "./scanner";
 import { Segmented } from "./controls";
 
-const PREVIEW_SIZE = 512;
+// Preview canvas is CSS-scaled to fill its box; render above CSS size so it
+// stays crisp on HiDPI and large viewports.
+const PREVIEW_SIZE =
+  typeof window === "undefined"
+    ? 1024
+    : Math.min(2048, 512 * Math.max(2, Math.ceil(window.devicePixelRatio || 1)));
 
 interface Props {
   settings: QrSettings;
@@ -46,6 +53,7 @@ export function QrPreview({
   const [busy, setBusy] = useState<"png" | "svg" | "copy" | null>(null);
   const [copied, setCopied] = useState(false);
   const [scanOpen, setScanOpen] = useState(false);
+  const [shared, setShared] = useState(false);
 
   const settingsRef = useRef(settings);
   const dataRef = useRef(data);
@@ -153,12 +161,20 @@ export function QrPreview({
   }, [settings, data, applyLogoOverlay]);
 
   const runCheck = useCallback(async (id: number) => {
+    // Wait for the lib draw + logo overlay of the latest render — but never
+    // indefinitely. A hung draw (e.g. an embedded logo that fails to decode)
+    // must surface as a failed check, not an eternal "Checking…".
+    await Promise.race([
+      renderPromiseRef.current,
+      new Promise((r) => setTimeout(r, 1500)),
+    ]);
     const canvas = containerRef.current?.querySelector("canvas") as
       | HTMLCanvasElement
       | null;
-    if (!canvas) return;
-    // Wait for the lib draw + logo overlay of the latest render.
-    await renderPromiseRef.current;
+    if (!canvas) {
+      onScanCheckRef.current({ status: "fail", decoded: null, matches: null, score: 0 });
+      return;
+    }
     // Let the last paint land.
     await new Promise((r) => setTimeout(r, 50));
     const res = await checkReadability(canvas, dataRef.current);
@@ -278,6 +294,18 @@ export function QrPreview({
     }
   }
 
+  async function shareLink() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("url", dataRef.current);
+    try {
+      await navigator.clipboard.writeText(url.toString());
+    } catch {
+      window.prompt("Copy your shareable link:", url.toString());
+    }
+    setShared(true);
+    setTimeout(() => setShared(false), 1600);
+  }
+
   // ---- scanability badge ----
 
   const badge = (() => {
@@ -336,14 +364,44 @@ export function QrPreview({
             </AnimatePresence>
           </>
         ) : (
-          <div className="flex flex-col items-center gap-3 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900">
-              <Link2 className="h-6 w-6 text-zinc-600" />
+          <div className="flex w-full max-w-[360px] flex-col gap-5 text-left">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900">
+                <Link2 className="h-4 w-4 text-indigo-400" />
+              </div>
+              <div>
+                <p className="text-xs font-medium text-zinc-200">Paste a URL</p>
+                <p className="mt-0.5 text-[11px] leading-relaxed text-zinc-500">
+                  Auto-detects brand colors, logo &amp; theme
+                </p>
+              </div>
             </div>
-            <p className="max-w-[240px] text-xs leading-relaxed text-zinc-500">
-              Paste a URL to generate your QR. Then push the creativity slider
-              and watch the scanability meter react.
-            </p>
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900">
+                <Wand2 className="h-4 w-4 text-fuchsia-400" />
+              </div>
+              <div>
+                <p className="text-xs font-medium text-zinc-200">
+                  Push the creativity slider
+                </p>
+                <p className="mt-0.5 text-[11px] leading-relaxed text-zinc-500">
+                  Shapes, gradients &amp; logos — scan-checked live
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900">
+                <Download className="h-4 w-4 text-emerald-400" />
+              </div>
+              <div>
+                <p className="text-xs font-medium text-zinc-200">
+                  Export &amp; share
+                </p>
+                <p className="mt-0.5 text-[11px] leading-relaxed text-zinc-500">
+                  PNG or SVG — or a link that pre-fills your design
+                </p>
+              </div>
+            </div>
           </div>
         )}
         {qrError && (
@@ -421,6 +479,20 @@ export function QrPreview({
           </div>
         </div>
         <div className="ml-auto flex items-center gap-2">
+          <button
+            type="button"
+            disabled={!data || busy !== null}
+            onClick={() => void shareLink()}
+            className="flex items-center gap-1.5 rounded-lg border border-zinc-700 px-3.5 py-2 text-xs font-medium text-zinc-300 transition hover:bg-zinc-800 disabled:opacity-40"
+            title="Copy a link that opens this QR"
+          >
+            {shared ? (
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+            ) : (
+              <Share2 className="h-3.5 w-3.5" />
+            )}
+            {shared ? "Linked" : "Share"}
+          </button>
           <button
             type="button"
             disabled={!data || busy !== null}

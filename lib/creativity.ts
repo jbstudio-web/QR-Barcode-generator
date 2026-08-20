@@ -44,7 +44,7 @@ export const SHAPE_OPTIONS: { value: Shape; label: string; title: string }[] = [
   { value: "square", label: "Square", title: "Standard canvas" },
 ];
 
-export const EXPORT_SIZES = [512, 1024, 2048];
+export const EXPORT_SIZES = [512, 1024, 2048, 4096];
 
 export const EC_CAPACITY: Record<EcLevel, number> = {
   L: 0.07,

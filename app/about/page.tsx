@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About & Contact — QR Atelier",
   description:
     "What QR Atelier is, who builds it, how the scanability engine works, and how to get in touch.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About & Contact — QR Atelier",
+    description:
+      "What QR Atelier is, who builds it, how the scanability engine works, and how to get in touch.",
+    url: `${SITE_URL}/about`,
+    type: "website",
+  },
 };
 
 export default function About() {

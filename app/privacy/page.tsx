@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — QR Atelier",
   description:
     "How QR Atelier handles your data: what stays in your browser, what our servers touch, and how advertising cookies are used.",
+  alternates: { canonical: "/privacy" },
+  openGraph: {
+    title: "Privacy Policy — QR Atelier",
+    description:
+      "How QR Atelier handles your data: what stays in your browser, what our servers touch, and how advertising cookies are used.",
+    url: `${SITE_URL}/privacy`,
+    type: "website",
+  },
 };
 
 const UPDATED = "August 20, 2026";
