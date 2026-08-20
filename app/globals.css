@@ -1,0 +1,216 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --background: #0b0b10;
+  --foreground: #f4f4f5;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+}
+
+/* ---------- generic sliders ---------- */
+input[type="range"].slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 20px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"].slider::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 999px;
+  background: #27272a;
+}
+input[type="range"].slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -5.5px;
+  border-radius: 999px;
+  background: #fafafa;
+  border: 1px solid #52525b;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  transition: transform 0.12s ease;
+}
+input[type="range"].slider::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+}
+input[type="range"].slider::-moz-range-track {
+  height: 5px;
+  border-radius: 999px;
+  background: #27272a;
+}
+input[type="range"].slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #fafafa;
+  border: 1px solid #52525b;
+}
+input[type="range"].slider:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---------- creativity slider ---------- */
+input[type="range"].creativity-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"].creativity-range::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: transparent;
+}
+input[type="range"].creativity-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -7px;
+  border-radius: 999px;
+  background: #fff;
+  border: 3px solid #0b0b10;
+  outline: 2px solid var(--thumb-ring, #a78bfa);
+  box-shadow: 0 2px 12px rgba(139, 92, 246, 0.5);
+  transition: transform 0.12s ease, outline-color 0.2s ease;
+}
+input[type="range"].creativity-range::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+}
+input[type="range"].creativity-range::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: transparent;
+}
+input[type="range"].creativity-range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #fff;
+  border: 3px solid #0b0b10;
+  outline: 2px solid var(--thumb-ring, #a78bfa);
+}
+
+/* ---------- color input ---------- */
+input[type="color"].color-swatch {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+input[type="color"].color-swatch::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"].color-swatch::-webkit-color-swatch {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+input[type="color"].color-swatch::-moz-color-swatch {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+/* ---------- scrollbars ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- preview backdrops ---------- */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.checker {
+  background-image: conic-gradient(#1c1c22 0 25%, #17171c 0 50%, #1c1c22 0 75%, #17171c 0);
+  background-size: 22px 22px;
+}
+
+/* light checkerboard for the barcode stage */
+.checker-light {
+  background-image: conic-gradient(#ececef 0 25%, #f6f6f8 0 50%, #ececef 0 75%, #f6f6f8 0);
+  background-size: 22px 22px;
+}
+
+/* ---------- scanner overlay ---------- */
+@keyframes scanline {
+  0% {
+    top: 4%;
+    opacity: 0.2;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    top: 94%;
+    opacity: 0.2;
+  }
+}
+.scanline {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, #34d399, transparent);
+  box-shadow: 0 0 14px rgba(52, 211, 153, 0.8);
+  animation: scanline 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+.pulse-soft {
+  animation: pulse-soft 1.5s ease-in-out infinite;
+}
+
+/* QR canvas fills its container while keeping aspect */
+.qr-canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
