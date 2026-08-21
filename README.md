@@ -4,7 +4,7 @@ A browser-based design lab for creating branded, scannable QR codes and standard
 
 **Everything runs in your browser.** No accounts, no uploads, no server-side rendering of codes.
 
-<p align="center"><img src="transform this image into anime style.jpg" alt="Junaid Bhatti banner" width="300%" /></p>
+<p align="center"><img src="Screenshot 2026-08-21 230016.png" alt="Junaid Bhatti banner" width="300%" /></p>
 
 ## Features
 
